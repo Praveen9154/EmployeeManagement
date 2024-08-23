@@ -29,6 +29,7 @@ namespace EmployeeManagement.Controllers
             if (ModelState.IsValid)
             {
                 _context.Employees.Add(employee);
+                _context.SaveChanges();
                 return RedirectToAction("Index");
             }
             return View(employee);
@@ -54,6 +55,8 @@ namespace EmployeeManagement.Controllers
                     existingEmployee.Salary = employee.Salary;
                     existingEmployee.Gender = employee.Gender;
                     existingEmployee.State = employee.State;
+                    _context.SaveChanges();
+                    return RedirectToAction("Index");
                 }
                 else
                 {
@@ -70,6 +73,7 @@ namespace EmployeeManagement.Controllers
             if (employee != null)
             {
                 _context.Employees.Remove(employee);
+                _context.SaveChanges();
             }
             return RedirectToAction("Index");
         }
