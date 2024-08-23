@@ -1,0 +1,72 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+@model List<EmployeeManagement.Models.Employee>
+
+<h2>Employee List</h2>
+@* <a href="@Url.Action("Create")">New Employee</a> *@
+@* Create Button *@
+<button type="button" onclick="location.href='@Url.Action("Create")'" class="btn btn-primary">
+    New Employee
+</button>
+<table id="employeeTable" class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Designation</th>
+            <th>Date of Joining</th>
+            <th>Salary</th>
+            <th>Gender</th>
+            <th>State</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var employee in Model)
+        {
+            <tr>
+                <td><a href="@Url.Action("Edit", new { id = employee.Id })">@employee.Name</a></td>
+                <td>@employee.Designation</td>
+                <td>@employee.DateOfJoining.ToShortDateString()</td>
+                <td class="salary">@employee.Salary</td>
+                <td>@employee.Gender</td>
+                <td>@employee.State</td>
+                <td>
+                   @* Delete Button *@
+                    <button type="button" onclick="if(confirm('Are you sure?')) { location.href='@Url.Action("Delete", new { id = employee.Id })'; }" class="btn btn-danger">
+                        Delete
+                    </button>
+                </td>
+            </tr>
+        }
+        <tr>
+            <td colspan="2"></td>
+            <td colspan="1">Total</td>
+            <td id="totalSalary" class="font-weight-bold" colspan="1">0.00</td> <!-- Total salary display -->
+            <td colspan="3"></td>
+        </tr>
+    </tbody>
+
+</table>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        function calculateTotalSalary() {
+            let total = 0;
+
+            $('#employeeTable .salary').each(function () {
+                let salary = parseFloat($(this).text().replace(/,/g, '')); // Convert salary to float
+                if (!isNaN(salary)) {
+                    total += salary;
+                }
+            });
+
+            $('#totalSalary').text(total.toFixed(2)); // Display total with 2 decimal places
+        }
+
+        calculateTotalSalary();
+    });
+</script>
